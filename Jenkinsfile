@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        // Define variables
+        // Define variables here
         GITHUB_REPO = 'https://github.com/Suyashchavan10/SpotFinder.git'
         DOCKERHUB_USERNAME = 'suyash1910'
         K8S_DEPLOYMENT_FILE = 'k8s-deployment.yml'
