@@ -17,24 +17,30 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
+                script{
+                    sh 'docker-compose build'
+                }
             }
         }
 
         stage('Push Docker Images') {
             steps {
-                sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
-                sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
-                sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
-                sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
-                sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
-                sh "docker push ${env.DOCKERHUB_USERNAME}/model"
+                script{
+                    sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
+                    sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
+                    sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
+                    sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
+                    sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
+                    sh "docker push ${env.DOCKERHUB_USERNAME}/model"
+                }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh "kubectl apply -f ${env.K8S_DEPLOYMENT_FILE}"
+                script{
+                    sh "kubectl apply -f ${env.K8S_DEPLOYMENT_FILE}"
+                }
             }
         }
     }
