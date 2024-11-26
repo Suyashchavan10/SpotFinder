@@ -9,7 +9,9 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git "${env.GITHUB_REPO}"
+                script {
+                    git branch: 'main', url: "${GITHUB_REPO}"
+                }
             }
         }
 
