@@ -4,6 +4,7 @@ services:
     build:
       context: ./client
       dockerfile: Dockerfile
+    image: krutikpatel/frontend:latest
     ports:
       - "3000:3000"
     depends_on:
@@ -13,6 +14,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: krutikpatel/backend:latest
     ports:
       - "5000:5000"
     depends_on:
@@ -22,5 +24,6 @@ services:
     build:
       context: ./model
       dockerfile: Dockerfile
+    image: krutikpatel/model:latest
     ports:
       - "8000:8000"
