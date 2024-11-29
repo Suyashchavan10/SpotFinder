@@ -14,15 +14,15 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: suyash1910/frontend:latest
+          image: krutikpatel/frontend:latest
           ports:
             - containerPort: 3000
         - name: backend
-          image: suyash1910/backend:latest
+          image: krutikpatel/backend:latest
           ports:
             - containerPort: 5000
         - name: model
-          image: suyash1910/model:latest
+          image: krutikpatel/model:latest
           ports:
             - containerPort: 8000
 ---
