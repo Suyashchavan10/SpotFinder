@@ -3,7 +3,7 @@ pipeline {
     environment {
         // Define variables here
         GITHUB_REPO = 'https://github.com/Suyashchavan10/SpotFinder.git'
-        DOCKERHUB_USERNAME = 'suyash1910'
+        DOCKERHUB_USERNAME = 'krutikpatel'
         K8S_DEPLOYMENT_FILE = 'k8s-deployment.yml'
     }
     stages {
@@ -26,12 +26,14 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script{
-                    sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
-                    sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
-                    sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
-                    sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
-                    sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
-                    sh "docker push ${env.DOCKERHUB_USERNAME}/model"
+                    docker.withRegistry('', 'DockerHubCred'){
+                        sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
+                        sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
+                        sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
+                        sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
+                        sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
+                        sh "docker push ${env.DOCKERHUB_USERNAME}/model"
+                    }
                 }
             }
         }
