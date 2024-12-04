@@ -14,17 +14,23 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: krutikpatel/frontend:latest
+          image: "${USERNAME}/frontend:latest"
           ports:
             - containerPort: 3000
         - name: backend
-          image: krutikpatel/backend:latest
+          image: "${USERNAME}/backend:latest"
           ports:
             - containerPort: 5000
         - name: model
-          image: krutikpatel/model:latest
+          image: "${USERNAME}/model:latest"
           ports:
             - containerPort: 8000
+      env:
+        - name: USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: username
 ---
 apiVersion: v1
 kind: Service
