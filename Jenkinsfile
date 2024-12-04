@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        // Define variables here
+        // Define variables
         GITHUB_REPO = 'https://github.com/Suyashchavan10/SpotFinder.git'
         // DOCKERHUB_USERNAME = 'krutikpatel'
         DOCKERHUB_USERNAME = 'suyash1910'
