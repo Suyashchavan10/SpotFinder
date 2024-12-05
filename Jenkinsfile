@@ -53,6 +53,7 @@ pipeline {
             steps {
                 script {
                     sh 'minikube status'
+                    sh 'kubectl get services'
                 }
             }
         }
