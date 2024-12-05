@@ -64,6 +64,7 @@ pipeline {
                 script {
                     sh 'minikube status'
                     sh 'kubectl get services'
+                    sh 'kubectl get pods'
                     sh 'minikube ip'
                 }
             }
