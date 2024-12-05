@@ -6,6 +6,7 @@ pipeline {
         // DOCKERHUB_USERNAME = 'krutikpatel'
         DOCKERHUB_USERNAME = 'suyash1910'
         K8S_DEPLOYMENT_FILE = 'k8s-deployment.yml'
+        CONFIGMAP_FILE = 'configmap.yml'
     }
     stages {
         stage('Checkout Code') {
@@ -49,6 +50,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script{
+                    sh "kubectl apply -f ${env.CONFIGMAP_FILE}"
                     sh "kubectl apply -f ${env.K8S_DEPLOYMENT_FILE}"
                 }
             }

@@ -17,20 +17,32 @@ spec:
           image: "${USERNAME}/frontend:latest"
           ports:
             - containerPort: 3000
+          env:
+            - name: USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: username
         - name: backend
           image: "${USERNAME}/backend:latest"
           ports:
             - containerPort: 5000
+          env:
+            - name: USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: username
         - name: model
           image: "${USERNAME}/model:latest"
           ports:
             - containerPort: 8000
-      env:
-        - name: USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: app-config
-              key: username
+          env:
+            - name: USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: username
 ---
 apiVersion: v1
 kind: Service
