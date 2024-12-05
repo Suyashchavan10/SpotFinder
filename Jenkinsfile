@@ -39,6 +39,7 @@ pipeline {
                 }
             }
         }
+
         stage('Start Minikube') {
             steps {
                 script {
@@ -47,6 +48,15 @@ pipeline {
                 }
             }
         }
+
+        stage('Check Minikube Status') {
+            steps {
+                script {
+                    sh 'minikube status'
+                }
+            }
+        }
+
         stage('Deploy to Kubernetes') {
             steps {
                 script{
