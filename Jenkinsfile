@@ -49,20 +49,20 @@ pipeline {
             }
         }
 
-        stage('Check Minikube Status') {
-            steps {
-                script {
-                    sh 'minikube status'
-                    sh 'kubectl get services'
-                }
-            }
-        }
-
         stage('Deploy to Kubernetes') {
             steps {
                 script{
                     sh "kubectl apply -f ${env.CONFIGMAP_FILE}"
                     sh "kubectl apply -f ${env.K8S_DEPLOYMENT_FILE}"
+                }
+            }
+        }
+
+        stage('Check Minikube Status') {
+            steps {
+                script {
+                    sh 'minikube status'
+                    sh 'kubectl get services'
                 }
             }
         }
