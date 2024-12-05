@@ -42,7 +42,7 @@ pipeline {
         stage('Start Minikube') {
             steps {
                 script {
-                    // change driver if needed
+                    // change driver=virtualbox if needed
                     sh "minikube start --driver=docker"
                 }
             }
