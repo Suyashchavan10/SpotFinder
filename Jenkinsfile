@@ -44,6 +44,7 @@ pipeline {
             steps {
                 script {
                     // change driver=virtualbox if needed
+                    sh "minikube delete"
                     sh "minikube start --driver=docker"
                 }
             }
