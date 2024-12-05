@@ -1,0 +1,18 @@
+---
+- name: Deploy Docker Images to Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Pull frontend image from Docker Hub
+      shell: docker pull {{ dockerhub_username }}/frontend:latest
+
+    - name: Pull backend image from Docker Hub
+      shell: docker pull {{ dockerhub_username }}/backend:latest
+
+    - name: Pull model image from Docker Hub
+      shell: docker pull {{ dockerhub_username }}/model:latest
+
+    - name: Apply Kubernetes ConfigMap
+      shell: kubectl apply -f {{ configmap_file }}
+
+    - name: Apply Kubernetes Deployment
+      shell: kubectl apply -f {{ k8s_deployment_file }}

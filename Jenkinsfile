@@ -40,34 +40,48 @@ pipeline {
             }
         }
 
-        stage('Start Minikube') {
+        stage('Deploy to kubernetes using Ansible notebook') {
             steps {
                 script {
-                    // change driver=virtualbox if needed
-                    sh "minikube delete"
-                    sh "minikube start --driver=docker"
+                    sh """
+                        ansible-playbook ansible-deploy.yml \
+                        --extra-vars "dockerhub_username=${DOCKERHUB_USERNAME} \
+                                    k8s_deployment_file=${K8S_DEPLOYMENT_FILE} \
+                                    configmap_file=${CONFIGMAP_FILE}" \
+                        -vv
+                    """
                 }
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script{
-                    sh "kubectl apply -f ${env.CONFIGMAP_FILE}"
-                    sh "kubectl apply -f ${env.K8S_DEPLOYMENT_FILE}"
-                }
-            }
-        }
+        // stage('Start Minikube') {
+        //     steps {
+        //         script {
+        //             // change driver=virtualbox if needed
+        //             sh "minikube delete"
+        //             sh "minikube start --driver=docker"
+        //         }
+        //     }
+        // }
 
-        stage('Check Minikube Status') {
-            steps {
-                script {
-                    sh 'minikube status'
-                    sh 'kubectl get services'
-                    sh 'kubectl get pods'
-                    sh 'minikube ip'
-                }
-            }
-        }
+        // stage('Deploy to Kubernetes') {
+        //     steps {
+        //         script{
+        //             sh "kubectl apply -f ${env.CONFIGMAP_FILE}"
+        //             sh "kubectl apply -f ${env.K8S_DEPLOYMENT_FILE}"
+        //         }
+        //     }
+        // }
+
+        // stage('Check Minikube Status') {
+        //     steps {
+        //         script {
+        //             sh 'minikube status'
+        //             sh 'kubectl get services'
+        //             sh 'kubectl get pods'
+        //             sh 'minikube ip'
+        //         }
+        //     }
+        // }
     }
 }
