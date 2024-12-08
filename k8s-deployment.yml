@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: "${USERNAME}/frontend:latest"
+          image: "krutikpatel/frontend"
+          imagePullPolicy: Never
           ports:
             - containerPort: 3000
           env:
@@ -24,7 +25,8 @@ spec:
                   name: app-config
                   key: username
         - name: backend
-          image: "${USERNAME}/backend:latest"
+          image: "krutikpatel/backend:latest"
+          imagePullPolicy: Never
           ports:
             - containerPort: 5000
           env:
@@ -34,7 +36,8 @@ spec:
                   name: app-config
                   key: username
         - name: model
-          image: "${USERNAME}/model:latest"
+          image: "krutikpatel/model:latest"
+          imagePullPolicy: Never
           ports:
             - containerPort: 8000
           env:

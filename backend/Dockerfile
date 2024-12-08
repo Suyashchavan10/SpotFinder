@@ -1,8 +1,8 @@
 # Backend/Dockerfile
 FROM node:16-alpine
-WORKDIR /app
+WORKDIR /
 COPY package*.json ./
-RUN npm install
+# RUN npm install
 COPY . .
 EXPOSE 5000
-CMD ["node", "src/index.js"]
+CMD ["node", "./src/index.js"]
