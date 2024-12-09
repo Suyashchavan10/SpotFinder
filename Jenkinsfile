@@ -9,13 +9,13 @@ pipeline {
         CONFIGMAP_FILE = 'configmap.yml'
     }
     stages {
-        stage('Checkout Code') {
-            steps {
-                script {
-                    git branch: 'main', url: "${GITHUB_REPO}"
-                }
-            }
-        }
+        // stage('Checkout Code') {
+        //     steps {
+        //         script {
+        //             git branch: 'main', url: "${GITHUB_REPO}"
+        //         }
+        //     }
+        // }
 
         stage('Build Docker Images') {
             steps {
