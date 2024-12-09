@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 script {
-                    git url: "${GITHUB_REPO}"
+                    git branch: 'krutik', url: "${GITHUB_REPO}"
                 }
             }
         }
