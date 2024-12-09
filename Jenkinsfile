@@ -17,28 +17,28 @@ pipeline {
         //     }
         // }
 
-        stage('Build Docker Images') {
-            steps {
-                script{
-                    sh 'docker-compose build'
-                }
-            }
-        }
+        // stage('Build Docker Images') {
+        //     steps {
+        //         script{
+        //             sh 'docker-compose build'
+        //         }
+        //     }
+        // }
 
-        stage('Push Docker Images') {
-            steps {
-                script{
-                    docker.withRegistry('', 'DockerHubCred'){
-                        sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
-                        sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
-                        sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
-                        sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
-                        sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
-                        sh "docker push ${env.DOCKERHUB_USERNAME}/model"
-                    }
-                }
-            }
-        }
+        // stage('Push Docker Images') {
+        //     steps {
+        //         script{
+        //             docker.withRegistry('', 'DockerHubCred'){
+        //                 sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
+        //                 sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
+        //                 sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
+        //                 sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
+        //                 sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
+        //                 sh "docker push ${env.DOCKERHUB_USERNAME}/model"
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Deploy to kubernetes using Ansible notebook') {
             steps {
