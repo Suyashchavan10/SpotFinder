@@ -6,11 +6,6 @@
     configmap_file: "configmap.yml"
     k8s_deployment_file: "k8s-deployment.yml"
   tasks:
-    - name: debug output 
-      ansible.builtin.command: whoami
-      register: whoami_output
-    - debug:
-        var: whoami_output
     # - name: Install required Python packages
     #   pip:
     #     name:
