@@ -6,21 +6,26 @@
     configmap_file: "configmap.yml"
     k8s_deployment_file: "k8s-deployment.yml"
   tasks:
-    - name: Install required Python packages
-      pip:
-        name:
-          - openshift
-          - kubernetes
-          - pyyaml
-        state: present
+    - name: debug output 
+      ansible.builtin.command: whoami
+      register: whoami_output
+    - debug:
+        var: whoami_output
+    # - name: Install required Python packages
+    #   pip:
+    #     name:
+    #       - openshift
+    #       - kubernetes
+    #       - pyyaml
+    #     state: present
 
-    - name: Pull Docker images from Docker Hub
-      ansible.builtin.command:
-        cmd: docker pull {{ dockerhub_username }}/{{ item }}:latest
-      with_items:
-        - frontend
-        - backend
-        - model
+    # - name: Pull Docker images from Docker Hub
+    #   ansible.builtin.command:
+    #     cmd: docker pull {{ dockerhub_username }}/{{ item }}:latest
+    #   with_items:
+    #     - frontend
+    #     - backend
+    #     - model
 
     - name: Apply Kubernetes ConfigMap
       kubernetes.core.k8s:
