@@ -36,17 +36,17 @@ spec:
                 configMapKeyRef:
                   name: app-config
                   key: username
-        - name: model
-          image: "krutikpatel/model:latest"
-          imagePullPolicy: Never
-          ports:
-            - containerPort: 8000
-          env:
-            - name: USERNAME
-              valueFrom:
-                configMapKeyRef:
-                  name: app-config
-                  key: username
+        # - name: model
+        #   image: "krutikpatel/model:latest"
+        #   imagePullPolicy: Never
+        #   ports:
+        #     - containerPort: 8000
+        #   env:
+        #     - name: USERNAME
+        #       valueFrom:
+        #         configMapKeyRef:
+        #           name: app-config
+        #           key: username
 ---
 apiVersion: v1
 kind: Service
