@@ -31,7 +31,7 @@ pipeline {
                     docker.withRegistry('', 'DockerHubCred'){
                         sh "docker tag frontend:latest ${env.DOCKERHUB_USERNAME}/frontend"
                         sh "docker tag backend:latest ${env.DOCKERHUB_USERNAME}/backend"
-                        sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
+                        // sh "docker tag model:latest ${env.DOCKERHUB_USERNAME}/model"
                         // sh "docker push ${env.DOCKERHUB_USERNAME}/frontend"
                         // sh "docker push ${env.DOCKERHUB_USERNAME}/backend"
                         // sh "docker push ${env.DOCKERHUB_USERNAME}/model"
