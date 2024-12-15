@@ -1,78 +1,118 @@
+/* App.css */
+
+/* General Reset */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f9fc;
     color: #333;
-}
-
-.App-header {
-    background-color: #6200ea;
-    color: white;
+  }
+  
+  .App {
+    text-align: center;
     padding: 20px;
-    text-align: center;
-}
-
-.App {
-    text-align: center;
-}
-
-.upload-section {
-    margin: 20px;
-}
-
-.file-label {
-    display: inline-block;
-    background-color: #6200ea;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.file-input {
-    display: none;
-}
-
-.image-list {
-    margin: 20px auto;
-    max-width: 400px;
-    text-align: left;
-}
-
-.image-list ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.image-list li {
-    background-color: #e0e0e0;
-    margin: 5px 0;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #ffffff;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #4a90e2;
+  }
+  
+  .upload-section {
+    margin-bottom: 20px;
+  }
+  
+  .upload-section input[type="file"] {
     padding: 10px;
-    border-radius: 5px;
-}
-
-.action-button {
-    background-color: #03dac5;
-    color: #000;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border: 2px dashed #4a90e2;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+    display: block;
+    outline: none;
     cursor: pointer;
-    font-size: 16px;
-}
-
-.action-button:hover {
-    background-color: #02c2a2;
-}
-
-.panorama-section {
-    margin: 20px auto;
-    max-width: 80%;
-}
-
-.panorama-image {
-    width: 800px;
-    height: auto;
-    border: 2px solid #ccc;
-    border-radius: 8px;
-}
+    color: #666;
+    background-color: #f1f5fa;
+  }
+  
+  .upload-section button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+  }
+  
+  .upload-section button:hover {
+    background-color: #357ab8;
+  }
+  
+  .image-list {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .image-list h3 {
+    font-size: 1.5rem;
+    color: #4a90e2;
+  }
+  
+  .image-list ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .image-list ul li {
+    padding: 5px 10px;
+    border-bottom: 1px solid #eaeaea;
+    color: #555;
+  }
+  
+  button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  button {
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: #4a90e2;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #357ab8;
+  }
+  
+  .panorama-section {
+    margin-top: 30px;
+  }
+  
+  .panorama-section h3 {
+    font-size: 1.8rem;
+    color: #4a90e2;
+    margin-bottom: 15px;
+  }
+  
+  .panorama-image {
+    max-width: 100%;
+    border: 2px solid #4a90e2;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }

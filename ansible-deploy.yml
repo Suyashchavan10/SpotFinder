@@ -1,6 +1,9 @@
 ---
 - name: Deploy Docker Images to Kubernetes
   hosts: localhost
+  # become: yes
+  # roles:
+  #   - role: common
   vars:
     dockerhub_username: "krutikpatel"
     configmap_file: "configmap.yml"

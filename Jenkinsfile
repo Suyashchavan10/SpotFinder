@@ -39,7 +39,18 @@ pipeline {
                 }
             }
         }
+        // stage('Test Backend Service') {
+        //     steps {
+        //         script {
+        //             // Run the curl command inside a temporary pod
+        //             def response = sh(script: "kubectl run --rm -i debug --image=curlimages/curl --restart=Never -- curl http://backend-service:5000/ping", returnStdout: true).trim()
 
+        //             // Assert the response to match the expected value
+        //             assert response == '{"message":"Pong!"}' : "Backend service did not respond as expected. Response: ${response}"
+        //             echo "Test passed: Backend service is up and responding correctly."
+        //         }
+        //     }
+        // }
         stage('Deploy to kubernetes using Ansible notebook') {
             steps {
                 ansiblePlaybook(
