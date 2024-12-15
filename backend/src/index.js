@@ -6,31 +6,64 @@ const fs = require('fs');
 const { spawn } = require('child_process');
 const winston = require('winston');
 const { ElasticsearchTransport } = require('winston-elasticsearch');
-
+const morgan = require('morgan');
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 const PORT = 5000;
 
 // Configure Elasticsearch Transport
-const esTransportOpts = {
-  level: 'info', // Log level
-  clientOpts: { node: 'http://localhost:9200' }, // Elasticsearch URL
-};
+const logDirectory = path.join(__dirname, '..', 'logs');
+if (!fs.existsSync(logDirectory)) fs.mkdirSync(logDirectory);
+
+
+// Configure Winston Logger
 const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }), // Add readable timestamps
+    winston.format.json()
+  ),
   transports: [
-    new winston.transports.Console(), // Log to console for debugging
-    new ElasticsearchTransport(esTransportOpts), // Log to Elasticsearch
+    new winston.transports.File({ filename: 'logs/application.log', level: 'info' }), // Log all events
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }), // Log errors
   ],
 });
 
+// Middleware for request logging
+app.use((req, res, next) => {
+  req.requestId = uuidv4(); // Generate unique request ID
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    logger.info('Request completed', {
+      requestId: req.requestId,
+      method: req.method,
+      url: req.originalUrl,
+      status: res.statusCode,
+      duration: `${duration}ms`,
+      timestamp: new Date().toISOString(),
+    });
+  });
+  next();
+});
+
+// Use morgan for HTTP request logging
+app.use(morgan('combined', { stream: fs.createWriteStream('logs/http-access.log', { flags: 'a' }) }));
+
+
+
+
 // Middleware
-app.use(cors({ origin: 'http://localhost:3000' })); // Allow React
+app.use(cors({ origin: '*' })); // Allow React
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Directories
 const uploadFolder = path.join(__dirname, '..', 'uploads');
 const panoramaFolder = path.join(__dirname, '..', 'uploads', 'panoramas');
+const pythonPath = path.join(__dirname, '..', 'venv', 'bin', 'python3');
+
 
 if (!fs.existsSync(uploadFolder)) fs.mkdirSync(uploadFolder);
 if (!fs.existsSync(panoramaFolder)) fs.mkdirSync(panoramaFolder);
@@ -45,16 +78,31 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Ping service
+app.get('/ping', (req, res) => {
+  res.status(200).json({ message: 'Pong!' });
+});
+
 // Route: Upload images
 app.post('/upload-images', upload.array('images', 10), (req, res) => {
   try {
     const files = req.files;
     if (!files || files.length === 0) {
-      logger.warn('No images uploaded');
+      logger.warn('No images uploaded', {
+        requestId: req.requestId,
+        route: '/upload-images',
+        status: 400,
+        timestamp: new Date().toISOString(),
+      });
       return res.status(400).json({ message: 'No images uploaded.' });
     }
 
-    logger.info('Images uploaded successfully', { fileDetails: files });
+    logger.info('Images uploaded successfully', {
+      requestId: req.requestId,
+      route: '/upload-images',
+      status: 200,
+      fileDetails: files.map((file) => ({ filename: file.filename, path: file.path })),
+    });
     res.status(200).json({
       message: 'Images uploaded successfully!',
       fileDetails: files.map((file) => ({
@@ -63,18 +111,28 @@ app.post('/upload-images', upload.array('images', 10), (req, res) => {
       })),
     });
   } catch (err) {
-    logger.error('Error uploading images', { error: err.message });
+    logger.error('Error uploading images', {
+      requestId: req.requestId,
+      route: '/upload-images',
+      error: err.message,
+      status: 500,
+      timestamp: new Date().toISOString(),
+    });
     res.status(500).json({ message: 'Error uploading images.', error: err.message });
   }
 });
 
 // Route: Create panorama
 app.post('/create-panorama', (req, res) => {
-  const scriptPath = path.join(__dirname, '..', '..', 'model', 'src', 'panorama_model.py');
+  const scriptPath = path.join(__dirname, '..', 'model', 'src', 'panorama_model.py');
 
-  logger.info('Starting panorama creation', { scriptPath });
+  logger.info('Starting panorama creation', {
+    requestId: req.requestId,
+    route: '/create-panorama',
+    timestamp: new Date().toISOString(),
+  });
 
-  const python = spawn('python3', [scriptPath, uploadFolder, panoramaFolder]);
+  const python = spawn(pythonPath, [scriptPath, uploadFolder, panoramaFolder]);
 
   let result = '';
   python.stdout.on('data', (data) => {
@@ -82,18 +140,36 @@ app.post('/create-panorama', (req, res) => {
   });
 
   python.stderr.on('data', (data) => {
-    logger.error('Error in Python script', { error: data.toString() });
+    logger.error('Error in Python script', {
+      requestId: req.requestId,
+      route: '/create-panorama',
+      error: data.toString(),
+      timestamp: new Date().toISOString(),
+    });
   });
 
   python.on('close', (code) => {
     if (code !== 0) {
-      logger.error('Python script exited with non-zero code', { code });
+      logger.error('Python script exited with non-zero code', {
+        requestId: req.requestId,
+        route: '/create-panorama',
+        exitCode: code,
+        timestamp: new Date().toISOString(),
+      });
       return res.status(500).json({ message: 'Error in Python script.' });
     }
 
     const panoramaPath = result.trim();
-    logger.info('Panorama created successfully', { panoramaPath });
-    res.status(200).json({ panoramaUrl: `http://localhost:5000/uploads/panoramas/${path.basename(panoramaPath)}` });
+    logger.info('Panorama created successfully', {
+      requestId: req.requestId,
+      route: '/create-panorama',
+      panoramaPath,
+      status: 200,
+      timestamp: new Date().toISOString(),
+    });
+    res.status(200).json({
+      panoramaUrl: `http://192.168.49.2:30001/uploads/panoramas/${path.basename(panoramaPath)}`,
+    });
   });
 });
 

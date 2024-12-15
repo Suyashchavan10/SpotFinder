@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+// src/components/App.js
+import React, { useState, useEffect } from 'react';
+import { fetchSampleData, uploadImages, createPanorama } from './services/api';
 import './App.css';
 
 const App = () => {
@@ -12,12 +13,11 @@ const App = () => {
     setSelectedImages(files); // Show selected image names
   };
 
-  const uploadImages = () => {
+  const handleUploadImages = () => {
     const formData = new FormData();
     selectedImages.forEach((file) => formData.append('images', file));
 
-    axios
-      .post('http://localhost:5000/upload-images', formData)
+    uploadImages(formData)
       .then((res) => {
         console.log('Images uploaded:', res.data);
         setImages(res.data.fileDetails); // Update the list of uploaded images
@@ -29,9 +29,8 @@ const App = () => {
       });
   };
 
-  const createPanorama = () => {
-    axios
-      .post('http://localhost:5000/create-panorama')
+  const handleCreatePanorama = () => {
+    createPanorama()
       .then((res) => {
         console.log('Panorama created:', res.data);
         setPanorama(res.data.panoramaUrl); // Get the panorama URL
@@ -41,6 +40,13 @@ const App = () => {
         alert('Error creating panorama.');
       });
   };
+
+  // Fetch sample data on component mount
+  useEffect(() => {
+    fetchSampleData()
+      .then((res) => console.log('Sample data:', res.data))
+      .catch((err) => console.error('Error fetching sample data:', err));
+  }, []);
 
   return (
     <div className="App">
@@ -53,7 +59,7 @@ const App = () => {
           onChange={handleImageUpload}
           accept="image/*"
         />
-        <button onClick={uploadImages}>Upload Images</button>
+        <button onClick={handleUploadImages}>Upload Images</button>
       </div>
 
       <div className="image-list">
@@ -65,7 +71,7 @@ const App = () => {
         </ul>
       </div>
 
-      <button onClick={createPanorama} disabled={images.length < 2}>
+      <button onClick={handleCreatePanorama} disabled={images.length < 2}>
         Create Panorama
       </button>
 
@@ -84,58 +90,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-// import React, { useState } from 'react';
-// import axios from 'axios';
-
-// const App = () => {
-//   const [images, setImages] = useState([]);
-//   const [randomImage, setRandomImage] = useState(null);
-
-//   const handleImageUpload = (event) => {
-//     const files = Array.from(event.target.files);
-//     const formData = new FormData();
-//     files.forEach((file) => formData.append('images', file));
-
-//     axios
-//       .post('http://localhost:5000/upload-images', formData)
-//       .then((res) => {
-//         console.log('Images uploaded:', res.data);
-//         setImages(res.data.fileDetails);
-//       })
-//       .catch((err) => {
-//         console.error('Error uploading images:', err);
-//       });
-//   };
-
-//   const fetchRandomImage = () => {
-//     axios
-//       .get('http://localhost:5000/random-image')
-//       .then((res) => {
-//         console.log('Random image:', res.data);
-//         setRandomImage(res.data.randomImage);
-//       })
-//       .catch((err) => {
-//         console.error('Error fetching random image:', err);
-//       });
-//   };
-
-//   return (
-//     <div>
-//       <h1>Image Uploader</h1>
-//       <input type="file" multiple onChange={handleImageUpload} />
-//       <button onClick={fetchRandomImage}>Get Random Image</button>
-
-//       {randomImage && (
-//         <div>
-//           <h2>Random Image</h2>
-//           <img src={randomImage} alt="Random" style={{ maxWidth: '100%', height: 'auto' }} />
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default App;

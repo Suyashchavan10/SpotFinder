@@ -9,7 +9,6 @@ services:
       - "3000:3000"
     depends_on:
       - backend
-
   backend:
     build:
       context: ./backend
@@ -17,13 +16,15 @@ services:
     image: backend:latest
     ports:
       - "5000:5000"
-    depends_on:
-      - model
-
-  model:
-    build:
-      context: ./model
-      dockerfile: Dockerfile
-    image: model:latest
-    ports:
-      - "8000:8000"
+    volumes:
+    - /home/krutik/Desktop/SPE/docker_log_dir/:/logs/
+    # depends_on:
+    #   - model
+  # model:
+  #   build: 
+  #     context: ./model
+  #     dockerfile: Dockerfile
+  #   image: model:latest
+  #   ports:
+  #     - "8000:8000"
+    
