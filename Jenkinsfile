@@ -53,12 +53,10 @@ pipeline {
         // }
         stage('Deploy to kubernetes using Ansible notebook') {
             steps {
-                // Ensure Ansible is installed and available in the PATH
                 sh '''
                     ansible-playbook -i inventory.ini ansible-deploy.yml --vault-password-file vault_password.txt
                 '''
             }
-        }
         }
     }
 }
