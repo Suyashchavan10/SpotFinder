@@ -12,13 +12,3 @@
     state: started
     enabled: yes
   become: yes
-
-- name: Configure NTP servers
-  template:
-    src: ntp.conf.j2
-    dest: /etc/ntp.conf
-    owner: root
-    group: root
-    mode: '0644'
-  notify: Restart NTP service
-  become: yes
