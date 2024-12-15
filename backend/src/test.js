@@ -21,4 +21,28 @@ describe('API Tests', () => {
         done();
       });
   });
+
+  it('should upload images successfully', (done) => {
+    request(app)
+      .post('/upload-images')
+      .attach('images', path.join(__dirname, 'test-image.jpg')) // Ensure you have a test image in the test directory
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body).to.have.property('message', 'Images uploaded successfully!');
+        expect(res.body.fileDetails).to.be.an('array');
+        done();
+      });
+  });
+
+  it('should create panorama successfully', (done) => {
+    request(app)
+      .post('/create-panorama')
+      .expect(200)
+      .end((err, res) => {
+        if (err) return done(err);
+        expect(res.body).to.have.property('panoramaUrl');
+        done();
+      });
+  });
 });
